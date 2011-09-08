@@ -29,27 +29,6 @@ void setup() {
    // Draw the graph
   // barGraph(numbers, 400);
   colorGrid(numbers, 50, 50, 70);
-  
-  /* 
-   for(int i = 1; i < 7; i++)
-   {
-     int[] randoms = getRandomNumbers(255);
-     barGraph(randoms, 100 + (i * 30));
-   }
-  
-   fill(255,40);
-   noStroke();
-   for(int i = 0; i < numbers.length; i++)
-   {
-     ellipse(numbers[i] * 8, width/2, 8, 8);
-   }
-   
-   // A line of random numbers
-   for(int i = 0; i < numbers.length; i++)
-   {
-     ellipse(ceil(random(0,99)) * 8, height/2 + 20, 8, 8);
-   }
-   */
 };
 
 void barGraph(int[] nums, float y)
@@ -103,7 +82,6 @@ void colorGrid(int [] nums, float x, float y, float s)
     textFont(label);
     textSize(s/2);
     text(i, (i % 10) * s, floor(i/10) * s);
-    //rect((i % 10) * s, floor(i/10) * s, s, s);
   }
   popMatrix();
 }

@@ -16,7 +16,7 @@ object3 = TestClass.new(8,7,5,10)
 object4 = TestClass.new(4,5,3,5)
 
 print "Euclidean Distance test..."
-euclideanAnswer = Math.sqrt(11)
+euclideanAnswer = 1/(1 + Math.sqrt(11))
 if euclideanAnswer ==  euclideanDistance(object1, object2)
 	puts "PASS"
 else
@@ -24,10 +24,18 @@ else
 end
 
 print "SMC test..."
-smcAnswer = 1/4
-if(smcAnswer == smc(object1, object2))
+smcAnswer = 1.0/4.0
+if smcAnswer == smc(object1, object2)
 	puts "PASS"
 else
 	puts "FAIL"
 end
 
+print "Tanimoto test..."
+tani = 87.0/(19.0+14.0-87.0)
+tani = 1.0/(1.0 + tani.abs)
+if tani == tanimoto(object1, object2)
+	puts "PASS"
+else
+	puts "FAIL"
+end

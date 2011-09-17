@@ -1,4 +1,5 @@
-# Assuming (for all functions) both of the objects are of the same type with the same attributes
+# Assuming (for all functions) both of the objects are of 
+# the same type with the same attributes that are all numbers
 
 # Euclidean Distance function
 def euclideanDistance(obj1, obj2)
@@ -28,6 +29,7 @@ def tanimoto(obj1, obj2)
 	1.0/(1.0 + (dot/(mx**2 + my**2 - dot)).abs)
 end
 
+# calculates the dot product for a given object
 def dotProduct(obj1, obj2)
 	dotProduct = 0
 	for obVar in obj1.instance_variables
@@ -36,6 +38,7 @@ def dotProduct(obj1, obj2)
 	dotProduct
 end
 
+# calculates the magnitude for a given object
 def magnitude(obj)
 	mag = 0
 	for obVar in obj.instance_variables
@@ -65,10 +68,16 @@ def pearsons(obj1, obj2)
 	covar/(stdX * stdY)
 end
 
+# calculates the mean for a given object
 def mean(obj)
 	mean = 0.0
 	for obVar in obj.instance_variables
 		mean += obj.instance_variable_get(obVar)
 	end
 	mean/obj.instance_variables.length
+end
+
+# Cosine Similarity function
+def cosineSimilarity(obj1, obj2)
+	dotProduct(obj1, obj2)/(magnitude(obj1) * magnitude(obj2))
 end

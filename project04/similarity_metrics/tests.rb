@@ -42,9 +42,16 @@ end
 
 print "Pearsons Correlation test..."
 pearsons = (20.5 * 1.0/3.0)/(Math.sqrt(13.0 * 1.0/3.0) * Math.sqrt(32.75 * 1.0/3.0))
-if(pearsons == pearsons(object1, object2))
+if pearsons == pearsons(object1, object2)
 	puts "PASS"
 else
 	puts "FAIL"
 end
 
+print "Cosine Similarity test..."
+cosine = 87.0/(Math.sqrt(14) * Math.sqrt(19))
+if cosine == cosineSimilarity(object1, object2)
+	puts "PASS"
+else
+	puts "FAIL"
+end

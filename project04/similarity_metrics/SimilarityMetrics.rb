@@ -22,14 +22,53 @@ end
 
 # Tanimoto function
 def tanimoto(obj1, obj2)
-	dotProduct = 0
-	xmagnitude = 0
-	ymagnitude = 0
-	for obVar in obj1.instance_variables
-		dotProduct += obj1.instance_variable_get(obVar) * obj2.instance_variable_get(obVar)
-		xmagnitude += obj1.instance_variable_get(obVar)
-		ymagnitude += obj2.instance_variable_get(obVar)
-	end
-	1.0/(1.0 + (dotProduct/(Math.sqrt(xmagnitude)**2 + Math.sqrt(ymagnitude)**2 - dotProduct)).abs)
+	dot = dotProduct(obj1, obj2)
+	mx = magnitude(obj1)
+	my = magnitude(obj2)
+	1.0/(1.0 + (dot/(mx**2 + my**2 - dot)).abs)
 end
 
+def dotProduct(obj1, obj2)
+	dotProduct = 0
+	for obVar in obj1.instance_variables
+		dotProduct += obj1.instance_variable_get(obVar) * obj2.instance_variable_get(obVar)
+	end
+	dotProduct
+end
+
+def magnitude(obj)
+	mag = 0
+	for obVar in obj.instance_variables
+		mag += obj.instance_variable_get(obVar)
+	end
+	Math.sqrt(mag)
+end
+
+# Pearson's Correlation function
+def pearsons(obj1, obj2)
+	xAvg = mean(obj1)
+	yAvg = mean(obj2)
+	stdX = 0.0
+	stdY = 0.0
+	covar = 0.0
+	for obVar in obj1.instance_variables
+		x = obj1.instance_variable_get(obVar)
+		y = obj2.instance_variable_get(obVar)
+		covar += (x - xAvg)*(y - yAvg)
+		stdX += (x - xAvg)**2
+		stdY += (y - yAvg)**2
+	end
+	preN = 1.0 / (obj1.instance_variables.length - 1.0)
+	covar = preN * covar
+	stdX = Math.sqrt(preN * stdX)
+	stdY = Math.sqrt(preN * stdY)
+	covar/(stdX * stdY)
+end
+
+def mean(obj)
+	mean = 0.0
+	for obVar in obj.instance_variables
+		mean += obj.instance_variable_get(obVar)
+	end
+	mean/obj.instance_variables.length
+end

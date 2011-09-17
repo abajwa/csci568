@@ -39,3 +39,12 @@ if tani == tanimoto(object1, object2)
 else
 	puts "FAIL"
 end
+
+print "Pearsons Correlation test..."
+pearsons = (20.5 * 1.0/3.0)/(Math.sqrt(13.0 * 1.0/3.0) * Math.sqrt(32.75 * 1.0/3.0))
+if(pearsons == pearsons(object1, object2))
+	puts "PASS"
+else
+	puts "FAIL"
+end
+

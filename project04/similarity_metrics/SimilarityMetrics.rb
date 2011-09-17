@@ -3,11 +3,11 @@
 
 # Euclidean Distance function
 def euclideanDistance(obj1, obj2)
-	running_total = 0
+	euc = 0
 	for obVar in obj1.instance_variables
-		running_total += (obj1.instance_variable_get(obVar) - obj2.instance_variable_get(obVar))**2
+		euc += (obj1.instance_variable_get(obVar) - obj2.instance_variable_get(obVar))**2
 	end
-	1.0/(1.0 + Math.sqrt(running_total))
+	1.0/(1.0 + Math.sqrt(euc))
 end
 
 # Simple Matching Coefficients (SMC) function
@@ -27,24 +27,6 @@ def tanimoto(obj1, obj2)
 	mx = magnitude(obj1)
 	my = magnitude(obj2)
 	1.0/(1.0 + (dot/(mx**2 + my**2 - dot)).abs)
-end
-
-# calculates the dot product for a given object
-def dotProduct(obj1, obj2)
-	dotProduct = 0
-	for obVar in obj1.instance_variables
-		dotProduct += obj1.instance_variable_get(obVar) * obj2.instance_variable_get(obVar)
-	end
-	dotProduct
-end
-
-# calculates the magnitude for a given object
-def magnitude(obj)
-	mag = 0
-	for obVar in obj.instance_variables
-		mag += obj.instance_variable_get(obVar)
-	end
-	Math.sqrt(mag)
 end
 
 # Pearson's Correlation function
@@ -68,6 +50,30 @@ def pearsons(obj1, obj2)
 	covar/(stdX * stdY)
 end
 
+# Cosine Similarity function
+def cosineSimilarity(obj1, obj2)
+	cos = dotProduct(obj1, obj2)/(magnitude(obj1) * magnitude(obj2))
+end
+
+# calculates the dot product for a given object
+def dotProduct(obj1, obj2)
+	dotProduct = 0
+	for obVar in obj1.instance_variables
+		dotProduct += obj1.instance_variable_get(obVar) * obj2.instance_variable_get(obVar)
+	end
+	dotProduct
+end
+
+# calculates the magnitude for a given object
+def magnitude(obj)
+	mag = 0
+	for obVar in obj.instance_variables
+		mag += obj.instance_variable_get(obVar)**2
+	end
+	Math.sqrt(mag)
+end
+
+
 # calculates the mean for a given object
 def mean(obj)
 	mean = 0.0
@@ -75,9 +81,4 @@ def mean(obj)
 		mean += obj.instance_variable_get(obVar)
 	end
 	mean/obj.instance_variables.length
-end
-
-# Cosine Similarity function
-def cosineSimilarity(obj1, obj2)
-	dotProduct(obj1, obj2)/(magnitude(obj1) * magnitude(obj2))
 end

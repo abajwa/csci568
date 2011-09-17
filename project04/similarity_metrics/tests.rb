@@ -32,7 +32,7 @@ else
 end
 
 print "Tanimoto test..."
-tani = 87.0/(19.0+14.0-87.0)
+tani = 87.0/(62.0+123.0-87.0)
 tani = 1.0/(1.0 + tani.abs)
 if tani == tanimoto(object1, object2)
 	puts "PASS"
@@ -49,7 +49,7 @@ else
 end
 
 print "Cosine Similarity test..."
-cosine = 87.0/(Math.sqrt(14) * Math.sqrt(19))
+cosine = 87.0/(Math.sqrt(62) * Math.sqrt(123))
 if cosine == cosineSimilarity(object1, object2)
 	puts "PASS"
 else

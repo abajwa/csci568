@@ -32,25 +32,26 @@ else
 end
 
 print "Tanimoto test..."
-tani = 87.0/(62.0+123.0-87.0)
-tani = 1.0/(1.0 + tani.abs)
-if tani == tanimoto(object1, object2)
+tanimotoAnswer = 87.0/(62.0+123.0-87.0)
+tanimotoAnswer = 1.0/(1.0 + tanimotoAnswer.abs)
+if tanimotoAnswer == tanimoto(object1, object2)
 	puts "PASS"
 else
 	puts "FAIL"
 end
 
 print "Pearsons Correlation test..."
-pearsons = (20.5 * 1.0/3.0)/(Math.sqrt(13.0 * 1.0/3.0) * Math.sqrt(32.75 * 1.0/3.0))
-if pearsons == pearsons(object1, object2)
+pearsonAnswer = (20.5 * 1.0/3.0)/(Math.sqrt(13.0 * 1.0/3.0) * Math.sqrt(32.75 * 1.0/3.0))
+if pearsonAnswer == pearsons(object1, object2)
 	puts "PASS"
 else
 	puts "FAIL"
 end
 
 print "Cosine Similarity test..."
-cosine = 87.0/(Math.sqrt(62) * Math.sqrt(123))
-if cosine == cosineSimilarity(object1, object2)
+cosineAnswer = 87.0/(Math.sqrt(62) * Math.sqrt(123))
+cosineAnswer = (1.0 + cosineAnswer)/2.0
+if cosineAnswer == cosineSimilarity(object1, object2)
 	puts "PASS"
 else
 	puts "FAIL"

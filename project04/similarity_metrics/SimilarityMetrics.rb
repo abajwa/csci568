@@ -1,7 +1,7 @@
 # Assuming (for all functions) both of the objects are of 
 # the same type with the same attributes that are all numbers
 
-# Euclidean Distance function
+# Euclidean Distance function normalized to be between 0 and 1
 def euclideanDistance(obj1, obj2)
 	euc = 0
 	for obVar in obj1.instance_variables
@@ -21,12 +21,12 @@ def smc(obj1, obj2)
 	similar/obj1.instance_variables.length
 end
 
-# Tanimoto function
+# Tanimoto function that has been normalized to be between 0 and 1
 def tanimoto(obj1, obj2)
 	dot = dotProduct(obj1, obj2)
 	mx = magnitude(obj1)
 	my = magnitude(obj2)
-	1.0/(1.0 + (dot/(mx**2 + my**2 - dot)).abs)
+	1.0/(1.0 + (dot/(mx**2 + my**2 - dot)))
 end
 
 # Pearson's Correlation function
@@ -50,9 +50,10 @@ def pearsons(obj1, obj2)
 	covar/(stdX * stdY)
 end
 
-# Cosine Similarity function
+# Cosine Similarity function normalized to be between 0 and 1
 def cosineSimilarity(obj1, obj2)
 	cos = dotProduct(obj1, obj2)/(magnitude(obj1) * magnitude(obj2))
+	(1.0 + cos)/2.0
 end
 
 # calculates the dot product for a given object

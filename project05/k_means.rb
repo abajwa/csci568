@@ -1,13 +1,13 @@
 
-def k_means(k, data)
+def k_means(k, data, n)
 
 	centroids = []
 
 	while centroids.length != k
 		c = rand(data.length)
 		if centroids.include?(data[c]) == false
-			centroids.push(data[c][0..3])
-			puts data[c][0..3]
+			centroids.push(data[c][0..n])
+			puts data[c][0..n]
 		end
 	end
 
@@ -16,6 +16,23 @@ def k_means(k, data)
 		clusters[i] = Array.new
 	end
 
+	# assign each data point to the closest centroid
+	data.each do |d|
+		minDist = euclideanDistance(d[0..n], centroids[0][0..n])
+		minDistCentroid = 0
+		i = 0
+		# figures out the centroid closest to the data point
+		centroids.each do |c|
+			edist = euclideanDistance(d[0..n],c[0..n])
+			if minDist > edist
+				minDist = edist
+				minDistCentroid = i
+			end
+			i+=1
+		end
+
+		clusters[minDistCentroid].push(d)
+	end
 
 
 	# repeat

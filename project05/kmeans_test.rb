@@ -10,7 +10,7 @@ file.each_line("\n") do |row|
 end
 
 
-clusters = k_means(3, data)
+clusters = k_means(3, data, 3)
 
 #clusters.each do |clus|
 #	puts "cluster------------------------------------------------------------"

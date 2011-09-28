@@ -1,21 +1,36 @@
 require 'k_means'
-
-filename = 'iris.csv'
-file = File.new(filename, 'r')
+require 'csv'
 
 data = Array.new
-file.each_line("\n") do |row|
-	columns = row.split(",")
-	data.push([columns[0].to_f, columns[1].to_f, columns[2].to_f, columns[3].to_f, columns[4]])
+CSV.open('iris.csv', 'r', ',') do |row|
+	data.push([row[0].to_f, row[1].to_f, row[2].to_f, row[3].to_f, row[4]])
 end
+
+data.pop
+
 
 
 clusters = k_means(3, data, 3)
 
-#clusters.each do |clus|
-#	puts "cluster------------------------------------------------------------"
-#	clus.each do |cl|
-#		puts cl
-#	end
-#	puts "-------------------------------------------------------------------"
-#end
+
+
+
+puts clusters[0].size
+puts clusters[1].size
+puts clusters[2].size
+
+=begin
+clusters[1].each do |c|
+	puts c
+end
+
+
+=begin
+clusters.each do |clus|
+	puts "CLUSTER------------------------------------------------------------"
+	clus.each do |cl|
+		puts cl
+	end
+	puts "-------------------------------------------------------------------"
+end
+=end

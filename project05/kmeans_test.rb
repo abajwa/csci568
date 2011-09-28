@@ -8,29 +8,16 @@ end
 
 data.pop
 
+clusters = k_means(3, data, 4)
 
-
-clusters = k_means(3, data, 3)
-
-
-
-
-puts clusters[0].size
-puts clusters[1].size
-puts clusters[2].size
-
-=begin
-clusters[1].each do |c|
-	puts c
-end
-
-
-=begin
-clusters.each do |clus|
-	puts "CLUSTER------------------------------------------------------------"
-	clus.each do |cl|
-		puts cl
+i = 1
+sse = 0.0
+clusters.each do |cluster|
+	puts "Cluster: " + i.to_s + "\tNumber of Elements: " + cluster.length.to_s
+	centroid = findCentroid(cluster, 4)
+	cluster.each do |point|
+		sse += euclideanDistance(point[0...4], centroid)**2
 	end
-	puts "-------------------------------------------------------------------"
+	i+=1
 end
-=end
+puts "\nTotal SSE: " + sse.to_s

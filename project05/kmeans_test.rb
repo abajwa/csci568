@@ -11,7 +11,7 @@ data.pop
 
 # does the clustering
 clusters = k_means(3, data, 4)
-
+puts "Iris Data Results using k = 3\n\n"
 # calculates the SSE per cluster and prints out the results for
 # each cluster
 i = 1

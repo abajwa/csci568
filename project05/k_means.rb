@@ -1,12 +1,15 @@
-
+# parameters:
+# 	k = number of clusters
+# 	data = array of data to cluster
+# 	n = number of data attributes per point
+# returns the clustering of data with k clusters
 def k_means(k, data, n)
 	centroids = randomCentroids(data, k, n)
-
 	clusters = Array.new(k)
 	centroidsChanged = true
 
+	# while the centroids are still changing
 	while centroidsChanged.equal?(true)
-
 		for i in 0...k
 			clusters[i] = Array.new
 		end
@@ -39,7 +42,6 @@ def k_means(k, data, n)
 
 		# checks to see if any of the centroids moved
 		centroids.each do |centroid|
-
 			if not oldCentroids.include?(centroid)
 				centroidsChanged = true
 			end
@@ -49,7 +51,9 @@ def k_means(k, data, n)
 	clusters
 end
 
-# similarity metric used for k-means
+# parameters:
+# 	obj1 and obj2 = data objects
+# similarity metric that finds the distance between two points
 def euclideanDistance(obj1, obj2)
 	euc = 0
 	for d in 0...obj1.length
@@ -58,7 +62,10 @@ def euclideanDistance(obj1, obj2)
 	Math.sqrt(euc)
 end
 
-# finds and returns the centroid of the given data
+# parameters:
+# 	cluster = data in one cluster
+# 	n = number of attributes per data point
+# finds and returns the centroid of the given data with n attributes
 def findCentroid(cluster, n)
 	avgArray = Array.new(n)
 	avgArray.fill(0.0)
@@ -73,6 +80,10 @@ def findCentroid(cluster, n)
 	avgArray
 end
 
+# parameters:
+# 	data = the data set
+# 	k = number of clusters
+# 	n = number of attributes per data point
 # picks k random centroids
 def randomCentroids(data, k, n)
 	centroids = Array.new

@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head> 
+<title>Similarity Metrics</title>
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<meta name="author" content="" />
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<link rel="stylesheet" href="css/blueprint/screen.css" type="text/css" media="screen, projection" />
+<link rel="stylesheet" href="css/blueprint/print.css" type="text/css" media="print" />
+<link rel="stylesheet" href="css/main.css" type="text/css" media="screen" /> 
+<!--[if IE]>
+  <link rel="stylesheet" href="css/blueprint/ie.css" type="text/css" media="screen, projection">
+<![endif]-->
+</head>
+<body>
+<div class="container">
+  <h1>Data Mining Portfolio</h1>
+  <h2>Similarity Metrics</h2>
+
+  <p class="introduction">
+    The idea of calculating similarity is to calculate the proximity of data objects. This is important because this similarity between objects is used in a variety of data mining algorithms. For example, similarity metrics are used in clustering to determine the proximity of the data objects being clustered which is the basis for clustering. The closer the objects are, as calculated by a similarity metric, the more similar they are. Finding these similarities can provide information about the data as well as assisting in algorithms used on the data. 
+  </p>
+  <h3>Euclidean Distance</h3>
+  <p class="similarityMetric">
+    This similarity metric is simply the linear distance between two points. It is generally used with continuous data. It is calculated by taking the difference between each attribute in the two multi-dimensional data points, squaring that difference and adding it to the sum of all previous differences. After this the square root of the total value is taken. An example of the code for this function in ruby is in the following code block.
+    <pre class="code">
+      # Euclidean Distance function normalized to be between 0 and 1
+      def euclideanDistance(obj1, obj2)
+        euc = 0
+        for obVar in obj1.instance_variables
+          euc += (obj1.instance_variable_get(obVar) - obj2.instance_variable_get(obVar))**2
+        end
+        1.0/(1.0 + Math.sqrt(euc))
+      end
+    </pre>
+  </p>
+  <h3>Simple Matching Coefficient(SMC)</h3>
+  <p class="similarityMetric">
+    SMC is called a similarity coefficient because it is used for binary data and returns a value between 0 and 1. It measures the presence or absence of binary data equally. It is calculated by taking the number of matching attribute values and dividing that by the total number of attributes. This similarity coefficient always returns a value between 0 and 1. A value of 0 means that the objects are not similar at all and a value of 1 means the opposite, that the objects are completely similar. An example of it's use could be to find the number of common answers on a true/false test. An implementation of this similarity metric can be seen below.
+    <pre class="code">
+      # Simple Matching Coefficients (SMC) function
+      def smc(obj1, obj2)
+        similar = 0.0;
+        for obVar in obj1.instance_variables
+          if obj1.instance_variable_get(obVar) == obj2.instance_variable_get(obVar)
+            similar += 1.0
+          end
+        end
+        similar/obj1.instance_variables.length
+      end
+    </pre>
+  </p>
+  <h3>Cosine Similarity</h3>
+  <p class="similarityMetric">
+    Cosine Similarity is typically used for continuous data but it has the ability to handle binary data as well. This similarity metric is calculated by taking the dot product of the two objects being compared and dividing that by length of the first object multiplied by the length of the second object.  The Cosine Similarity metric is one of the most common measures used to check the similarity between documents because it has the ability to ignore 0-0 matches and handle continuous data unlike SMC and Jaccard. Below is an implementation of this similarity metric split up into three main functions. 
+    <pre class="code">
+      # Cosine Similarity function normalized to be between 0 and 1
+      def cosineSimilarity(obj1, obj2)
+        cos = dotProduct(obj1, obj2)/(magnitude(obj1) * magnitude(obj2))
+        (1.0 + cos)/2.0
+      end
+
+      # calculates the dot product for a given object
+      def dotProduct(obj1, obj2)
+        dotProduct = 0
+        for obVar in obj1.instance_variables
+          dotProduct += obj1.instance_variable_get(obVar) * obj2.instance_variable_get(obVar)
+        end
+        dotProduct
+      end
+
+      # calculates the magnitude for a given object
+      def magnitude(obj)
+        mag = 0
+        for obVar in obj.instance_variables
+          mag += obj.instance_variable_get(obVar)**2
+        end
+        Math.sqrt(mag)
+      end
+    </pre>
+  </p>
+
+</div>
+</body>
+</html>

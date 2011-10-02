@@ -1,0 +1,154 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head> 
+<title>Cluster Analysis</title>
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<meta name="author" content="" />
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<link rel="stylesheet" href="css/blueprint/screen.css" type="text/css" media="screen, projection" />
+<link rel="stylesheet" href="css/blueprint/print.css" type="text/css" media="print" />
+<link rel="stylesheet" href="css/main.css" type="text/css" media="screen" /> 
+<!--[if IE]>
+  <link rel="stylesheet" href="css/blueprint/ie.css" type="text/css" media="screen, projection">
+<![endif]-->
+</head>
+<body>
+<div class="container">
+  <h1>Data Mining Portfolio</h1>
+  <h2>Cluster Analysis</h2>
+
+  <p class="introduction">
+    Clustering is the grouping of data based on the proximity of the data. The goal of clustering is to create groupings of objects with similar attributes that are different from the other groups. Clustering can be considered a form of unsupervised classification because it divides data into groups (clusters) with class labels which are the clusters. 
+  </p>
+  <h3>K-Means</h3>
+  <p class="algorithm">
+    The k-means clustering algorithm is a prototype-based clustering technique that defines its prototype in terms of a centroid. This centroid is typically the mean of the group of points in a cluster in continuous n-dimensional space. The algorithm begins by selecting k initial centroids. These initial centroids can be chosen number of ways. One option is that can be chosen randomly which can produce different sample standard error (SSE) values and provide a poor selection. This poor selection can be mended by running k-means multiple times with different random points and selecting the clustering with the lowest SSE. Another option for the initial positions of the centroids is to pick the first one at random then pick the point furthest from the first and so on until there are k centroids. The issue with this method is that it can end up selecting outliers. After the initial centroids have been chosen the algorithm goes through each of the data points and assigns them to one of the centroids. This is done by using a similarity metric, such as Euclidean distance as the proximity measure between data points and the centroids. Once all of the data points have been assigned to a centroid, forming a cluster, the centroid position is recalculated. The mean of all the points in a cluster is the new position of the centroid. The process of assigning data points to a centroid is repeated followed by the reassignment of the centroids until the centroids no longer move, or equivalently the data points do not change clusters. The advantages of this clustering algorithm are that it is simple, it can be used for a wide variety of data types, the space complexity is modest since only the data points and centroids are stored, and the runtime complexity is also modest because it is linear. Disadvantages of this algorithm include ending up with empty clusters, it is susceptible to outliers, it has a difficulty detecting clusters with non-spherical shapes or different sizes and densities, and it is restricted to data for which there is a notion of a center. Below is an implementation of this clustering algorithm.
+    <pre class="code">
+      # parameters:
+      #   k = number of clusters
+      #   data = array of data to cluster
+      #   n = number of data attributes per point
+      # returns the clustering of data with k clusters
+      def k_means(k, data, n)
+        centroids = randomCentroids(data, k, n)
+        clusters = Array.new(k)
+        centroidsChanged = true
+
+        # while the centroids are still changing
+        while centroidsChanged.equal?(true)
+          for i in 0...k
+            clusters[i] = Array.new
+          end
+
+          centroidsChanged = false
+
+          # assign each data point to the closest centroid
+          data.each do |d|
+            minDist = euclideanDistance(d[0...n], centroids[0])
+            minDistCentroid = 0
+            i = 0
+            # figures out the centroid closest to the data point
+            centroids.each do |c|
+              edist = euclideanDistance(d[0...n],c)
+              if minDist > edist
+                minDist = edist
+                minDistCentroid = i
+              end
+              i+=1
+            end
+            clusters[minDistCentroid].push(d)
+          end
+
+          oldCentroids = centroids
+          centroids = Array.new
+          # move the location of the centroid to the middle of the cluster
+          clusters.each do |cluster|
+            centroids.push(findCentroid(cluster, n))
+          end
+
+          # checks to see if any of the centroids moved
+          centroids.each do |centroid|
+            if not oldCentroids.include?(centroid)
+              centroidsChanged = true
+            end
+          end
+        end
+
+        clusters
+      end
+
+      # parameters:
+      #   obj1 and obj2 = data objects
+      # similarity metric that finds the distance between two points
+      def euclideanDistance(obj1, obj2)
+        euc = 0
+        for d in 0...obj1.length
+          euc += (obj1[d] - obj2[d])**2
+        end
+        Math.sqrt(euc)
+      end
+
+      # parameters:
+      #   cluster = data in one cluster
+      #   n = number of attributes per data point
+      # finds and returns the centroid of the given data with n attributes
+      def findCentroid(cluster, n)
+        avgArray = Array.new(n)
+        avgArray.fill(0.0)
+        cluster.each do |point|
+          for i in 0...n
+            avgArray[i] += point[i]
+          end
+        end
+        for i in 0...avgArray.length
+          avgArray[i] = avgArray[i]/cluster.length
+        end
+        avgArray
+      end
+
+      # parameters:
+      #   data = the data set
+      #   k = number of clusters
+      #   n = number of attributes per data point
+      # picks k random centroids
+      def randomCentroids(data, k, n)
+        centroids = Array.new
+        while centroids.length != k
+          c = rand(data.length)
+          if centroids.include?(data[c]) == false
+            centroids.push(data[c][0..n])
+          end
+        end
+        centroids
+      end
+    </pre>
+  </p>
+  <h3>Agglomerative Hierarchical Clustering</h3>
+  <p class="algorithm">
+    This type of clustering starts by defining each point as an individual cluster. At each time step in the algorithm the closest pair of points is merged into a cluster. The proximity of the points is measured using a similarity metric which depends on the type of data being clustered. This process is repeated until there is only one cluster. This process can be seen in Diagram 1 below where points 2 and 3 are merged first, then point 4 is added to the cluster, and finally point 1 is added as the final point in the cluster.  A variation of this method is to assume a cluster is represented by its centroid and the proximity is measured in terms of the increase in SSE that results from the merging of the two clusters. This variation is called Ward’s method. Some of the key issues with this clustering algorithm are that the algorithm is expensive in terms of computational and storage requirements, it has a lack of a global objective function which means it focuses on locally deciding which clusters to merge, its ability to handle different cluster sizes is poor in some cases, and the merging decisions are final which prevents a local optimization criterion from becoming a global one. The advantages include the fact that it is ideal for hierarchical data, it can produce an ordering of objects (a hierarchy), and smaller clusters are generated which may be helpful for discovery of information. This type of clustering is the preferred strategy when you have a sense of hierarchy in the data. 
+    <br />
+    <center>
+    <img src="images/aggHierarchical.png" width="291" height="188"/>
+    <br />
+    Diagram 1. Example iterations of Agglomerative Hierarchical clustering
+    </center>
+    <br />
+
+  </p>
+  <h3>DBSCAN</h3>
+  <p class="algorithm">
+    DBSCAN is a density-based clustering algorithm. The algorithm starts by defining points as either core points, border points, or noise points. Core points are in the interior of a density-based cluster and a point is considered a core point if the number of points within a certain radius of the point exceeds a certain specified threshold. A border point is a point that falls within the radius of a core point but is not itself a core point. Lastly, a noise point is a point that is neither a core point nor a border point. These terms are demonstrated in Diagram 2 below. As you can see in the diagram the core points each have at least 3 other points within their Eps radius. The edge point is within the radius of a core point and has only 1 point within its radius therefore it is an edge point. The noise point does not have any other points within its radius, is not within the radius of any points, and it is not a core point therefore it is noise. Once the points have been classified using the previous three types the clustering begins by putting any two core points that are close enough (within a radius of Eps) together into the same cluster. Any border point that is close enough to a core point is put into the same cluster as that core point and nose points are discarded. The disadvantages of this clustering include the difficulty the algorithm has with widely varying densities, difficulty with high dimensional data due to the fact that density is harder to define for such data, and the algorithm can be expensive when the computation of nearest neighbors requires calculating all pairwise proximities. The advantages of DBSCAN are that it is relatively resistant to noise and it can handle clusters with different shapes and sizes which would not be found by k-means. This algorithm is ideal to use with data that has noise since it is relatively resistant compared to k-means and when the number of clusters is not known.  
+    <br />
+    <br />
+    <center>
+    <img src="images/pointTypes.png"/>
+    <br />
+    Diagram 2. Point classifications in DBSCAN
+    </center>
+  </p>
+
+</div>
+</body>
+</html>

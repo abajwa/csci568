@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head> 
+<title>Classification</title>
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<meta name="author" content="" />
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<link rel="stylesheet" href="css/blueprint/screen.css" type="text/css" media="screen, projection" />
+<link rel="stylesheet" href="css/blueprint/print.css" type="text/css" media="print" />
+<link rel="stylesheet" href="css/main.css" type="text/css" media="screen" /> 
+<!--[if IE]>
+  <link rel="stylesheet" href="css/blueprint/ie.css" type="text/css" media="screen, projection">
+<![endif]-->
+</head>
+<body>
+<div class="container">
+  <h1>Data Mining Portfolio</h1>
+  <h2>Classification</h2>
+
+  <p class="introduction">
+    Classification is the process of assigning data objects to categories. The two main reasons we classify data are to describe the data and to be able to predict the class of unlabeled data. The typical classification approach consists of supplying a training set, building the model, testing the model, and then evaluation of the model. A training set that consists of data whose class labels are known must be provided and this training set is used to build the classification model. The other set of data, the test set which consists of data with unknown labels, is then used to test the classification model. At this point the model can be evaluated for accuracy and/or error rate. This typical process of classification is applied to all of the classification algorithms described. 
+  </p>
+  <h3>Decision Tree Classifier</h3>
+  <p class="classifier">
+    A decision tree is made up of three types of nodes: root nodes, internal nodes, and leaf nodes. The leaf nodes are assigned a class label and the root and internal nodes contain attribute test conditions. A common algorithm used to create a decision tree is Hunt’s Algorithm. In Hunt’s algorithm the decision tree is grown recursively by partitioning the training records into successively purer subsets. The first step is to define that if all of the training records associated with the current node have the same class label then that node is a leaf node. If the previous step is not true and the data for the current node contains more than one label then an attribute test condition is selected to partition the data into smaller subsets. At this point the previous node is now an internal node (or the root node if this is the first iteration) and a child node for each partition is created. These steps are recursively applied to each child node until a stopping condition is met. 
+    The training records are split based on an impurity measure which determines the degree of impurity for the resulting child nodes. These measures include Entropy, Gini Impurity, and classification error. The equations for these metrics can be seen below in Figure 1. The attribute test condition resulting in the best split is chosen, or equally the attribute test condition with the least impurity. The stopping condition for this recursive algorithm could be any of the following: if the impurity falls below a certain threshold, it has reached a solution where the leaf nodes are all pure and have the same class, or if the leaf node has less than the minimum number of records specified. The main drawbacks of this classification model include overfitting, underfitting, and finding an optimal tree is infeasible. Overfitting can occur when there is noise in the samples or if the model is simply over trained. Underfitting occurs when there are not enough examples to train the model so there is too little training. The advantage of using this method is that once the model is built it is very quick to classify data. Another advantage is the fact that decision trees are simple to understand and interpret. There are different methods such as post- pruning, pre-pruning, and cross-validation that can help remedy some of the problems with decision tree classification. 
+    <br />
+    <center>
+    <img src="images/impurityEquations.png"/>
+    <br />
+    <br />
+    Figure 1. Equations used to measure the impurity of a split
+    </center>
+    <br />
+  </p>
+
+  <h3>Rule-Based Classifier</h3>
+  <p class="classifier">
+    This is a technique for classifying data using a bunch of if…then… rules. These rules are represented in a disjunctive normal form, for example R = (r1 V r2 V… rk) where r1-rk are the classification rules. The rule-based classifier classifies a data object based on the rule triggered by the data. For example, if the rule r1: (leg count = 8) -> Arachnid is in the rule set and the data is a bug with 8 legs then this data object will be classified as an Arachnid due to the rule. These rules can be extracted by two methods: direct which extract rules directly from the data and indirect which extract classification rules from other classification models such as decision trees. 
+    Direct methods of rule extraction cover methods such as sequential covering and learn-one-rule. Sequential covering is where rules are grown in a greedy fashion based on a certain evaluation measure and the rules are extracted one class at a time. Learn-one-rule tries to extract a classification rule that covers many of the positive examples and none or very few of the negative examples in the training set. An indirect method for rule extraction could be given a decision tree that it extracts rules from. There are also two rule-growing strategies: general-to-specific where the initial rule covers all data in the data set and is refined or specific-to-general where one positive example is randomly chosen from the data and it is generalized to include more of the data. These processes should be stopped with one of the following stopping conditions: when a rule has an accuracy of 1, when the increase in accuracy gets below a certain threshold, or when a training set cannot be split any further. A disadvantage of rule-based classification is the fact that rule sets can become very large for data with a large amount of classes.  Also if rules are too general data may be misclassified, this is true for the opposite as well, if rules are too specific they may not be able to classify data correctly. Advantages of this method include the simplicity of this classification technique, the ability to classify new data quickly, their performance is comparable to decision trees, and they can easily handle missing values. 
+  </p>
+
+  <h3>Nearest Neighbor Classifier</h3>
+  <p class="classifier">
+    This classification technique takes a different approach than the previous two, it is a lazy learner. This means that this classification technique delays the process of modeling the training data until it is needed to classify the test data. Nearest Neighbor starts by representing each training data object as a data point in a d-dimensional space, where d is the number of attributes. There is no training involved. Instead, this algorithm compares each training data point with the test data provided using a similarity metric and the test data is classified as the same as that point. This comparison may be costly if the training data set is too large. Another variation of this classification algorithm is k nearest neighbors where k is a number of points. In this case k nearest points to the test data are found and the test data is classified to the class of the majority of them, breaking ties randomly. An example of this can be seen in Figure 2 below. If k is too small this method may be susceptible to overfitting and if k is too large misclassification may occur. The advantages of this type of classification are that there is no need for a model and it is more flexible because it can provide arbitrarily shaped decision boundaries. This model may be susceptible to noise and classification can be expensive due to all the comparisons. This type of classifier is better for continuous attributes.
+    <br />
+    <center>
+    <img src="images/NNDiagram.png"/>
+    <br />
+    <br />
+    Figure 2. An example of KNN where k = 5
+    </center>
+    <br />
+
+    <pre class="code">
+      TO BE ADDED WHEN IMPLEMENTED
+    </pre>
+  </p>
+
+  <h3>Bayesian Classifier</h3>
+  <p class="classifier">
+    This classifier is a probabilistic approach of classifying data. The algorithms goal is to find a value of C (the class) that maximizes the probability of the data being of class C given the attributes of a data object; this is called the posterior probability. The algorithm calculates this probability for all values of C using Bayes theorem (Figure 3) and chooses the value of C with the maximum probability. A variation of this approach is the Naïve Bayes Classifier which assumes all the attributes are conditionally independent and instead of computing the class-conditional probability for every combination of the class and data it only has to estimate the conditional probability of an attribute given a class. This approach is robust to isolated noise, it can handle missing values, and it is robust to irrelevant attributes. But the performance can be degraded by correlated attributes.
+    Another variation is the Bayesian Belief Network which allows us to specify which pair of attributes is conditionally independent and provides a graphical representation of the probabilistic relationships among a set of random variables. This classification approach can be used to encode casual dependencies among variables but it can be time consuming and requires a large amount of effort. Although, adding a new variable is straight forward after the model is built and it is robust to model overfitting. 
+    <br />
+    <center>
+    <img src="images/BayesEquations.png"/>
+    <br />
+    <br />
+    Figure 3. Conditional probability equation and Bayes Theorem
+    </center>
+    <br />
+  </p>
+
+  <h3>Artificial Neural Network</h3>
+  <p class="classifier">
+    This classifier is composed of interconnected nodes and directed links. The first type of ANN is a perceptron, its input nodes represent input attributes and output nodes represent model output and the link between the two is weighted. The weights on the links are adapted to fit the input-output relationships. The algorithm starts by assigning random values to the weights. Then it goes on to compute the predicted output for each training example. For each weight it then updates the weight using the weight update equation in Figure 4 below. When using a sign function (Figure 4) the output is computed by performing a weighted sum on the inputs, subtracting the bias from the sum, and then examining the sign of the result. During the training process the weights are adjusted until the outputs become consistent with the true outputs in the training data. If the prediction of the data is correct the weight does not change, if it is not correct it is modified to compensate for the error of y-yhat. ANN’s can also have multiple layers of nodes. These layers between the input and output layers are called hidden layers which enable the classifier to handle more complex functions. The weights are typically handled using back-propagation where in the forward phase the weights are updated using weights from the previous iteration and then in the backward phase the weight update formula is applied in the reverse direction. The advantages of using an ANN are that once created the classification is quick, it can handle redundant features, and it can be used to approximate any target functions. The problem with using ANN’s is that they are sensitive to noise, can converge to local minima in some cases, and training is time consuming.
+    <br />
+    <center>
+    <img src="images/ANNEquations.png"/>
+    <br />
+    <br />
+    Figure 4. Weight update function and sign function used in the ANN algorithm
+    </center>
+    <br />
+  </p>
+</div>
+</body>
+</html>

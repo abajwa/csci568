@@ -105,4 +105,8 @@ class Network
 	def train
 
 	end
+
+	# used by the tain method to backpropagate through the ANN
+	def backpropogate
+	end
 end

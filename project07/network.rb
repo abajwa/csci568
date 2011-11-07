@@ -1,15 +1,21 @@
 class Network
-	attr_accessor :taget_output, :output, :input, :hidden_output, :layers
+  attr_reader :output, :target_output, :hidden_output, :layers, :input
 
-	def initialize(layerSizes)
-		@layers = Array.new
-		@input = Array.new
-		@output = Array.new
-		@hidden_output = Array.new
-		if layerSizes.size == 0
-			puts "Error: the number of neurons in each layer must be specified."
-			return -1
-		end
+  def initialize(layerSizes)
+    # if there are no incoming layer sizes
+    if layerSizes.size == 0 and !layerSize.include?(0)
+      puts "Error: the number of neurons (> 0) in each layer must be specified."
+      return -1
+    end
+
+    # the learning rate
+    @N = 0.1
+
+    @layers = Array.new
+    # arrays that hold the input and the outputs of the layers
+    @input = Array.new
+    @output = Array.new
+    @hidden_output = Array.new
 
 		# creates a layer for each of the sizes provided in layerSizes
 		layerSizes.each_index do |i|
@@ -28,11 +34,6 @@ class Network
 		end
 	end
 
-	# adds a layer to the layers for the network
-	def add_layer(layer)
-		@layers.push(layer)
-	end
-
 	# accepts an array with the input values for the network
 	# the number of input values must match the number of neurons
 	# in the first layer of the network
@@ -44,7 +45,7 @@ class Network
 		@input = input
 	end
 
-	def result(output)
+	def target_output(output)
 		if @layers[layers.size - 1].neurons.size() != output.size
 			puts "Error: the number of inputs must be equal to the number of neurons in the input layer"
 			return -1
@@ -60,57 +61,30 @@ class Network
 			return -1
 		end
 
-		@hidden_output = Array.new(0)
-		# for each layer feed the inputs forward
-		@layers.each_index do |i|
-
-			# if the current layer is the input layer
-			if i == 0
-				# array that holds the output of the current layer
-				@results = Array.new(layers[1].neurons.size, 0.0)
-
-				# gets all the neurons for the current layer
-				neurons = layers[i].neurons()
-
-				# for each neuron on the input layer
-				neurons.each_index do |nindex|
-
-					# input at 0 corresponds with neuron 0
-					weights = neurons[nindex].weights
-
-					# for each weight on the current neuron multiply it by the
-					# input and add it to the total for that neuron
-					weights.each_index do |windex|
-						@results[windex] += @input[nindex] * weights[windex]
-					end
+		# creates an array to hold the hidden output and feeds the inputs of the neural network
+    # takes the output of the input layer (the inputs) and multiplies them by their respective
+    # weights then adds them together and inputs them into next layer
+		@hidden_output = Array.new(layers[1].neurons.size(), 0.0)
+		@hidden_output.each_index do |h|
+			@results = Array.new(layers[1].neurons.size, 0.0)
+				total = 0.0
+				@input.each_index do |i|
+					total += @input[i] * layers[0].neurons[i].weights[h]
 				end
-			# for every other layer
-			else
-				# if there is another layer after the current
-				# i.e. if it is not the output layer
-				if i <= (layers.size - 2)
-					# treat results array as if it is now the input
-					@hResults = Array.new(layers[i+1].neurons.size, 0.0)
-					neurons = layers[i].neurons()
+				@hidden_output[h] = total
+		  end
 
-					# for each neuron on the current layer
-					neurons.each_index do |nindex|
-
-						@hidden_output.push(@results[nindex])
-
-						# results at 0 corresponds with neuron 0
-						weights = neurons[nindex].weights
-					# for each weight on the current neuron multiply it by the
-					# result from the previous layer and add it to the total for
-					# that neuron
-						weights.each_index do |windex|
-							@hResults[windex] += @results[nindex] * weights[windex]
-						end
-					end
+      # creates the array to hold the overall output of the current feed_forward
+      # same idea as the previous comments
+			@output = Array.new(@target_output.size, 0.0)
+			@output.each_index do |o|
+				total = 0.0
+				@hidden_output.each_index do |h|
+					total += @hidden_output[h] * layers[1].neurons[h].weights[o]
 				end
+				@output[o] = total
 			end
-		end
-		@output = @hResults
+		@output
 	end
 
 	# trains the network with backpropagation
@@ -118,89 +92,85 @@ class Network
 	# assumes 1 through size-1 are hidden layers
 	# assumes layers[size-1] is the output layer
 	def train
-		# while the outputs do not match the actual
 		results = @input
-		while euclideanDistance(results, @target_output) < 0.999
-			results = feed_forward
+		error0 = 1
+		error1 = 1
+		error2 = 1
+    it = 0
+
+    # while the error of each output is greater than 0.000001
+		while error0 > 0.000001 and error1 > 0.000001 and error2 > 0.000001
+      results = feed_forward
 			backpropogate
+
+			error0 = (@target_output[0] - @output[0]).abs
+			error1 = (@target_output[1] - @output[1]).abs
+			error2 = (@target_output[2] - @output[2]).abs
+
+      puts "Results of Iteration: " + it.to_s
+      puts results
+      puts "--------------------"
+      it += 1
+
 		end
-		results
+
+    puts "\n\nOutput after training:"
+		puts results
 	end
 
-	def euclideanDistance(obj1, obj2)
-		#puts "---obj1----"
-		#puts obj1
-		#puts "-----------"
-		self.to_s
-		euc = 0
-		for d in 0...obj1.length
-			euc += (obj1[d] - obj2[d])**2
-		end
-		#puts euc
-		1.0/(1.0 + Math.sqrt(euc))
-	end
 
-
+  # dtanh was used in CI but since my implementation is linear the derivative would
+  # just be 1
 	def dtanh(y)
-		1.0-(y*y)
+		1.0#-(y*y)
 	end
 
 	# used by the tain method to backpropagate through the ANN
 	def backpropogate
-		# calculate the errors for the output
+		# if there is no output generated yet, feed_forward must be called first
 		if @output.size == 0
 			puts "Error: network output must be specified before feed_forward can be executed"
 			return -1
 		end
 
-		# calculate the errors for the output
-		# current output is in output
-		# target output is in target_output
+		# holds the errors for the overall network output
 		output_deltas = Array.new(@output.size, 0.0)
-
-		puts "OUTPUT DELTA CALC ---------------------------"
-		# for each current output
+		# for each current output calculate the error of the current output
+    # in comparisson to the target output. 
 		@output.each_index do |i|
 			error = @target_output[i] - @output[i]
-			puts "\tERROR: " + error.to_s
-			puts "\tdtanh: " + dtanh(@output[i]).to_s
-			puts @output[i]
 			output_deltas[i] = dtanh(@output[i]) * error
-			puts "\tRESULT: " + output_deltas[i].to_s
 		end
 
-		# calculate the errors for the hidden layer
-		hidden_deltas = Array.new(layers[1].neurons.size, 0.0)
-		# for each hidden_layer output
-		@hidden_output.each_index do |i|
+		# holds the errors for the hidden layer
+		hidden_deltas = Array.new(@hidden_output.size, 0.0)
+		# for each hidden_layer output calculate the error
+		hidden_deltas.each_index do |h|
 			error = 0.0
 			# for each output delta
-			output_deltas.each_index do |j|
-				error += output_deltas[j] * layers[1].neurons[i].weights[j]
+			output_deltas.each_index do |o|
+				error += output_deltas[o] * layers[1].neurons[h].weights[o]
 			end
-			hidden_deltas[i] = dtanh(@hidden_output[i]) * error
-		end
-		puts "Hidden output: "
-		puts @hidden_output
-		# updates the weights going into the output layer
-		@hidden_output.each_index do |i|
-			@output.each_index do |j|
-				puts "\tOutput-deltas: " + output_deltas[j].to_s
-				puts "\thidden output: " + @hidden_output[i].to_s
-				change = output_deltas[j] * @hidden_output[i]
-				puts "\tChange: " + change.to_s
-				layers[1].neurons[i].weights[j] += change/2.0
-				puts "\t Thing: " + layers[1].neurons[i].weights[j].to_s
-			end
+			hidden_deltas[h] = dtanh(@hidden_output[h]) * error
 		end
 
-
-		# updates the weights going into the hidden layer
+		# updates the weights going from the hidden layer to the output layer
+    # by calculating a change using the error from the output and hidden layer
+    # then adding that change * the learning rate to the current weight
 		# for each input
+		@hidden_output.each_index do |h|
+			@output.each_index do |o|
+				change = output_deltas[o] * @hidden_output[h]
+				layers[1].neurons[h].weights[o] += change * @N
+			end
+		end
+
+    # updates the weights going from the input layer to the hidden layer in the same
+    # way as the other weights were updated
 		@input.each_index do |i|
 			@hidden_output.each_index do |j|
 				change = hidden_deltas[j] * @input[i]
-				layers[0].neurons[i].weights[j] += change/2.0
+				layers[0].neurons[i].weights[j] += change * @N
 			end
 		end
 	end
@@ -221,5 +191,11 @@ class Network
 			end
 		end
 	end
+
+  private
+  # adds a layer to the layers for the network
+  def add_layer(layer)
+    @layers.push(layer)
+  end
 
 end

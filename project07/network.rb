@@ -107,11 +107,15 @@ class Network
 			error1 = (@target_output[1] - @output[1]).abs
 			error2 = (@target_output[2] - @output[2]).abs
 
+      # rounds output to the nearest 100th
+      #@output.each_index do |o|
+      #  @output[o] = (@output[o]*100).ceil/100.0
+      #end
+
       puts "Results of Iteration: " + it.to_s
       puts results
       puts "--------------------"
       it += 1
-
 		end
 
     puts "\n\nOutput after training:"

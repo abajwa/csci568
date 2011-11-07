@@ -1,0 +1,17 @@
+To run this project simply run main.rb
+
+This project is an implementation of a simple ANN that has an input layer with 3 nodes, one hidden layer with 2 nodes, and an output layer with 3 nodes. The network is trained to produce the output of 1.0, -1.0, and 0.0 given the inputs 1.0, 0.25, and -0.5.
+
+This implementation of the ANN contains the following classes:
+
+Neuron - Keeps track of the weights going out from each neuron in the network. 
+
+Layer - Keeps track of all of the neurons in each layer of the network in order.
+
+Network - Keeps track of the overall network (layers, output, input, etc.) and contains methods used to train the network. 
+
+The feed_forward function in the Network class uses a simple linear approach to calculate the input of each neuron. The input of a neuron is the sum of the output of each of the previous neurons multiplied by their respective weights going to the current neuron. This total is also the output of the current neuron. 
+
+The backpropogate function in the Network class changes the weights in each part of the network to better match the target output when feed_forward is run. It first finds the errors for the output of the overall network and the error of the output at the hidden layer. It then uses the output of the overall network to adjust the weights between the hidden layer and the output layer by multiplying the error of the output by the output of the hidden layer and then multiplying that total by the learning rate and adding it to the current weight in question. The same general method is also applied to the hidden layer in order to adjust the weights between the input layer and the hidden layer.
+
+The train function applies the above feed_forward and backpropogation functions until each of the produced outputs have an error under 0.000001.

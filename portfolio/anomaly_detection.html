@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head> 
+<title>Anomaly Detection</title>
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<meta name="author" content="" />
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<link rel="stylesheet" href="css/blueprint/screen.css" type="text/css" media="screen, projection" />
+<link rel="stylesheet" href="css/blueprint/print.css" type="text/css" media="print" />
+<link rel="stylesheet" href="css/main.css" type="text/css" media="screen" /> 
+<!--[if IE]>
+  <link rel="stylesheet" href="css/blueprint/ie.css" type="text/css" media="screen, projection">
+<![endif]-->
+</head>
+<body>
+<div class="container">
+  <h1>Data Mining Portfolio</h1>
+  <h2>Anomaly Detection</h2>
+
+  <p class="introduction">
+    The goal of anomaly detection is to find object that are different from most other objects in a data set. Anomalous objects are often outliers in a data set. Anomalies can result from a variety of different sources. The main causes of anomalies are that data in a dataset may be from different classes, there may be natural variation within a data set, or there may be data measurement and collections errors. Anomalies caused by different classes in the data set are often easy to detect. Natural variation in the data set can be due to extreme variation in an attribute. Although, does not always mean the object is an anomaly. Lastly, data measure and collection errors can result in anomalies in the data set. These can include anything from human error to a problem with a measuring device. An issue with anomaly detection is that the cause of an anomaly is often unknown. 
+  </p>
+  <h3>Statistical-Based Approach</h3>
+  <p class="approach">
+    A statistical approach to anomaly detection is basically a model based approach. In this way of detecting anomalies, a model is built for the data and objects are evaluated depending on how well they fit the model. The probabilistic definition of an outlier is “an object that has low probability with respect to a probability distribution model of the data.” One statistical approach to anomaly detection is using a Gaussian distribution to detect anomalies. This detection technique can be accomplished by the fact that an object with an attribute value x from a Gaussian distribution with mean of 0 and standard deviation of 1 is an outlier if the absolute value of x is greater than or equal to c where c is the probability constant chosen so that prob(|x|) >=  c. Another statistical approach to anomaly detection is a mixture model approach. This technique assumes that the data comes from a mixture of probability distributions and that each cluster can be identified with one of the distributions. When used for anomaly detection, the data is modeled as a mixture of two distributions, one for the anomalies and one for the ordinary data. Like other anomaly detection approaches, this one has its strengths and weaknesses. This approach tends to perform poorly for high dimensional data and there aren’t many options available for multivariate data. Identifying the specific distribution of a data set can be an issue as well because data sets with non-standard distributions are relatively common. Another issue to this approach is the number of attributes used. This is an issue because most statistical outlier detection techniques apply to a single attribute rather than multivariate data; although there are some techniques that help solve this issue. Last but not least, there is an issue when it comes to mixtures of distributions. The models that take into account these mixtures of distributions tend to be complicated to understand and use. Despite all of the weaknesses, this approach does have its strengths. It is built upon a firm foundation of standard statistical techniques, when there is sufficient knowledge of the data, the tests applied should be very effective, and there are also a lot of statistical outlier tests available for single attributes. 
+  </p>
+
+  <h3>Proximity-Based Approach</h3>
+  <p class="approach">
+    An anomaly in a proximity based anomaly detection approach is a point that is distant from most points. One of the easiest and most common ways to measure whether an object is distant from most points is to use the distance to the k-nearest neighbors. The outlier score, in this case, can be highly sensitive to the value chosen for k. If the k value is too large then it is possible for all objects in a cluster that has fewer objects than k to become outliers. If k is too small then there is the possibility that no points will be classified as outliers. The weaknesses of this type of anomaly detection approach are that it can be too expensive due to the O(m^2) time, the approach is also sensitive to the choice of parameters, and, lastly, it cannot handle data sets with widely varying regions o density. However, there are advantages to this approach of anomaly detection. This approach is generally easier to apply than a statistical approach because it is easier to determine a meaningful proximity measure for a data set than it is to determine its statistical distribution.
+  </p>
+
+  <h3>Density-Based Approach</h3>
+  <p class="approach">
+    According to a density based approach for anomaly detection, outliers/anomalies are objects that are in regions of low density which means the outlier score, in this case, is the inverse of the density around an object. This approach is very similar to proximity based anomaly detection since density is usually defined in terms of proximity. A common approach to density based anomaly detection is to define density as the reciprocal of the average distance to the k nearest neighbors. If the resulting distance is small then the density is high and if it is large then the density is low. Another common approach is to use the DBSCAN clustering algorithm to determine which objects are in areas of low density. In the approaches above, the density around an object is equivalent to the number of objects that are within a specified distance of the object. This specified distance needs to be chosen carefully, just as the k value in the proximity based approach, because if the density is too small then the resulting outlier score will be high and, inversely, if the density is too large then many outliers would have densities similar to that of normal points. This algorithm can also take O(m^2) time, but it can be reduced to O(m log m) where m is the number of objects. Parameter selection can also be difficult with this approach since the approach is dependent on the distance specified. A strength of this approach is that it can handle data with widely varying densities. 
+  </p>
+
+  <h3>Clustering-Based Approach</h3>
+  <p class="approach">
+    The idea of a clustering based anomaly detection approach is that an object is an outlier if it does not strongly belong to any cluster. There are a couple approaches to this concept; the first is that clusters that are small and far from other clusters can be considered outliers. This approach requires a threshold for a minimum cluster size and the distance between small clusters and other clusters. Due to the nature of this approach, it is highly sensitive to the number of clusters chosen for the algorithm. Another common cluster based approach is to first cluster all of the data objects and then assess the degree to which an object belongs to any cluster. In this approach, the degree to which an object belongs to a cluster can be computed by the distance of an object to the center of a cluster or by some objective function. A cluster based approach using an algorithm such as k-means can be highly efficient due to the linear or near-linear time and space complexity of the algorithm. Additionally, the definition of a cluster is often complementary to that of an outlier so it is possible to find both outliers and clusters at the same time. But, the outliers produced can be heavily dependent on the number of clusters and the presence of outliers in the data. This is because the quality of a cluster can be affected by an outlier and the number of clusters can determine if there is an outlying cluster or not. 
+  </p>
+  
+  </p>
+</div>
+</body>
+</html>

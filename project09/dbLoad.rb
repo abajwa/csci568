@@ -6,15 +6,6 @@ ActiveRecord::Base.establish_connection(
     :database  => "kddDB.sqlite3.db"
 )
 
-#ActiveRecord::Schema.define do 
-#	create_table :albums do |table|
-#		table.column :id, :integer
-#		table.column :artist_id, :integer
-
-#	end
-#end
-
-
 class Album < ActiveRecord::Base
 	has_and_belongs_to_many :genres
 	belongs_to :artist
@@ -50,31 +41,34 @@ Album.delete_all
 Artist.delete_all
 Track.delete_all
 
+puts "Loading genres..."
 # loads genres into the database
-File.open("trackTest/genreData1.txt").each do |record|
+File.open("track1/genreData1.txt").each do |record|
 	Genre.create(:id => record)
 end
 
+puts "Loading artists..."
 # loads artists into the database
-File.open("trackTest/artistData1.txt").each do |record|
+File.open("track1/artistData1.txt").each do |record|
 	Artist.create(:id => record)
 end
 
+puts "Loading albums..."
 # loads albums into the database
-File.open("trackTest/albumData1.txt").each do |line|
+File.open("track1/albumData1.txt").each do |line|
 	tokens = line.split("|")
 	genres = tokens[2..tokens.length]
 
-	genres.map! { |g| Genre.find(g)}
+	genres.map! {|g| Genre.find(g)}
 	Album.create(:id => tokens[0], :artist_id => tokens[1], :genres => genres)
 end
 
+puts "Loading tracks..."
 # loads tracks into the database
-# loads albums into the database
-File.open("trackTest/trackData1.txt").each do |line|
+File.open("track1/trackData1.txt").each do |line|
 	tokens = line.split("|")
 	genres = tokens[3..tokens.length]
 
-	genres.map! { |g| Genre.find(g)}
+	genres.map! {|g| Genre.find(g)}
 	Track.create(:id => tokens[0], :album_id => tokens[1], :artist_id => tokens[2], :genres => genres)
 end
